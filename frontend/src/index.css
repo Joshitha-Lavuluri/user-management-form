@@ -1,124 +1,470 @@
+/* ================================================================
+   INDEX.CSS — Advanced Form Validation Styles
+   ================================================================
+   Sections:
+     1. CSS Variables & Reset
+     2. Layout & Typography
+     3. Form Card Styling
+     4. Input Fields & Validation States
+     5. Error Message Styles (inline, tooltip, icon)
+     6. Password Strength Indicator
+     7. Buttons & Hover Effects
+     8. Success Modal
+     9. Users Table
+    10. Animations (shake, fade, scale)
+    11. Responsive Design
+   ================================================================ */
+
+/* ─── 1. CSS VARIABLES & RESET ───────────────────────────────────── */
 :root {
-  --background: #f5f7fb;
+  --background: #f0f4ff;
   --surface: #ffffff;
   --text: #1d2939;
   --muted: #64748b;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --danger: #dc2626;
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --primary-light: #e0e7ff;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
   --border: #e2e8f0;
-  --success: #16a34a;
+  --border-focus: #a5b4fc;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+  --radius: 14px;
+  --radius-lg: 20px;
+  --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font);
   background: var(--background);
   color: var(--text);
+  min-height: 100vh;
 }
 
-button,
-input {
+button, input {
   font: inherit;
 }
 
+/* ─── 2. LAYOUT & TYPOGRAPHY ─────────────────────────────────────── */
 .app-container {
-  max-width: 980px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 30px 20px 60px;
+  padding: 40px 20px 80px;
 }
 
 header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 header h1 {
-  margin: 0;
-  font-size: clamp(2rem, 2.5vw, 2.8rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 header p {
-  margin: 12px auto 0;
+  margin-top: 8px;
   color: var(--muted);
-  max-width: 640px;
+  font-size: 1rem;
 }
 
+/* Status message bar */
 .message {
-  margin: 20px auto;
-  max-width: 980px;
+  margin-bottom: 24px;
   padding: 14px 18px;
-  border: 1px solid rgba(37, 99, 235, 0.2);
-  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  background: rgba(79, 70, 229, 0.08);
   color: var(--primary-dark);
-  border-radius: 12px;
+  border-radius: var(--radius);
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
 }
 
+/* ─── 3. FORM CARD STYLING ───────────────────────────────────────── */
 .form-section,
 .table-section {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 28px;
+  transition: box-shadow 0.3s ease;
+}
+
+.form-section:hover,
+.table-section:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
   margin-bottom: 24px;
-}
-
-.form-field {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.form-field label {
-  font-weight: 600;
   color: var(--text);
 }
 
-.form-field input {
+/* ─── 4. INPUT FIELDS & VALIDATION STATES ────────────────────────── */
+.form-field {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-field label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* Wrapper allows positioning icons inside the input */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 44px 12px 14px;
   background: #f9fafb;
   outline: none;
-  transition: border-color 0.2s ease;
+  font-size: 0.95rem;
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.form-field input:focus {
-  border-color: var(--primary);
+.input-wrapper input:focus {
+  border-color: var(--border-focus);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+/* Green border for valid inputs */
+.input-wrapper input.input-valid {
+  border-color: var(--success);
+  background: #f0fdf4;
+}
+.input-wrapper input.input-valid:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+/* Red border for invalid inputs (name, password, confirm) */
+.input-wrapper input.input-error {
+  border-color: var(--danger);
+  background: #fef2f2;
+}
+.input-wrapper input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+/* Orange border for email warning style */
+.input-wrapper input.input-warning {
+  border-color: var(--warning);
+  background: #fffbeb;
+}
+.input-wrapper input.input-warning:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
+}
+
+/* ─── 5. ERROR MESSAGES & ICONS ──────────────────────────────────── */
+
+/* Icons positioned inside the input field on the right */
+.field-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* Green tick for valid fields */
+.tick-icon {
+  color: var(--success);
+  font-weight: 700;
+  animation: scaleIn 0.3s ease;
+}
+
+/* Orange warning icon for email */
+.warning-icon {
+  color: var(--warning);
+  font-size: 1.2rem;
+  animation: scaleIn 0.3s ease;
+}
+
+/* Inline red error message (below input) */
+.error-message {
+  display: block;
+  color: var(--danger);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-top: 6px;
+  padding-left: 2px;
+  animation: fadeIn 0.25s ease;
+}
+
+/* Tooltip-style error (for age field) */
+.tooltip-error {
+  position: relative;
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  animation: fadeIn 0.25s ease;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--danger);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+/* Password toggle button */
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  z-index: 2;
+}
+
+.toggle-password:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: translateY(-50%) scale(1);
+}
+
+/* ─── 6. PASSWORD STRENGTH INDICATOR ─────────────────────────────── */
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* Strength levels with widths and colors */
+.strength-weak {
+  width: 33%;
+  background: var(--danger);
+}
+
+.strength-medium {
+  width: 66%;
+  background: var(--warning);
+}
+
+.strength-strong {
+  width: 100%;
+  background: var(--success);
+}
+
+/* Strength text labels */
+.strength-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  min-width: 52px;
+}
+
+.strength-text-weak { color: var(--danger); }
+.strength-text-medium { color: var(--warning); }
+.strength-text-strong { color: var(--success); }
+
+/* ─── 7. BUTTONS & HOVER EFFECTS ─────────────────────────────────── */
 .button-row {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  margin-top: 8px;
 }
 
 button {
   border: none;
-  border-radius: 12px;
-  padding: 12px 18px;
+  border-radius: var(--radius);
+  padding: 13px 22px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-button:hover {
-  transform: translateY(-1px);
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .primary-button {
-  background: var(--primary);
-  color: white;
+  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+}
+
+.primary-button:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.reset-button {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid var(--border);
 }
 
 .secondary-button {
-  background: #eef2ff;
-  color: #1e293b;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* ─── 8. SUCCESS MODAL ───────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: modalSlideIn 0.4s ease;
+}
+
+.modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background: var(--success-light);
+  color: var(--success);
+  font-size: 2rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.4s ease;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.modal-data {
+  text-align: left;
+  background: #f8fafc;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.modal-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-row:last-child {
+  border-bottom: none;
+}
+
+.modal-label {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.modal-value {
+  font-weight: 500;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.modal-countdown {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.modal-close-btn {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 10px 28px;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+/* ─── 9. USERS TABLE ─────────────────────────────────────────────── */
+.table-section h2 {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
 }
 
 .table-wrapper {
@@ -131,19 +477,23 @@ table {
 }
 
 thead {
-  background: #eef2ff;
+  background: var(--primary-light);
 }
 
-th,
-td {
-  padding: 14px 16px;
+th, td {
+  padding: 13px 16px;
   text-align: left;
   border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
 }
 
 th {
-  color: var(--text);
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+tbody tr {
+  transition: background 0.2s ease;
 }
 
 tbody tr:hover {
@@ -152,10 +502,11 @@ tbody tr:hover {
 
 .edit-button,
 .delete-button {
-  padding: 10px 14px;
-  margin-right: 8px;
+  padding: 8px 14px;
+  margin-right: 6px;
   border-radius: 10px;
   font-weight: 600;
+  font-size: 0.82rem;
 }
 
 .edit-button {
@@ -164,18 +515,73 @@ tbody tr:hover {
 }
 
 .delete-button {
-  background: #fee2e2;
+  background: var(--danger-light);
   color: #991b1b;
 }
 
-@media (max-width: 700px) {
-  .form-section,
-  .table-section {
-    padding: 18px;
+/* ─── 10. ANIMATIONS ─────────────────────────────────────────────── */
+
+/* Shake animation for invalid age field */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 50%, 90% { transform: translateX(-6px); }
+  30%, 70% { transform: translateX(6px); }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scale in animation for icons */
+@keyframes scaleIn {
+  from { transform: translateY(-50%) scale(0); }
+  to { transform: translateY(-50%) scale(1); }
+}
+
+/* Modal slide-in animation */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── 11. RESPONSIVE DESIGN ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .app-container {
+    padding: 24px 16px 60px;
   }
 
-  th,
-  td {
-    padding: 12px 10px;
+  .form-section,
+  .table-section {
+    padding: 20px;
+    border-radius: var(--radius);
+  }
+
+  .modal-card {
+    padding: 28px 20px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .button-row button {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px 8px;
+    font-size: 0.82rem;
   }
 }
